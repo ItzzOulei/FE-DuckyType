@@ -104,12 +104,10 @@ export default function Leaderboard({ loadUsers }) {
                 <h1 className={styles.leaderboardTitle}>LEADERBOARD</h1>
                 {error && <div className={styles.error}>{error}</div>}
                 {isLoading ? (
-                    <section className="dots-container">
-                        <div className="dot"></div>
-                        <div className="dot"></div>
-                        <div className="dot"></div>
-                        <div className="dot"></div>
-                        <div className="dot"></div>
+                    <section className={styles.dots_container}>
+                        <div className={styles.dot}></div>
+                        <div className={styles.dot}></div>
+                        <div className={styles.dot}></div>
                     </section>
                 ) : users.length > 0 ? (
                     <ul className={styles.leaderboardList}>
