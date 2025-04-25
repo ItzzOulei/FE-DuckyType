@@ -15,7 +15,7 @@ const Header = () => {
                         width={50}
                         height={50}
                     />
-                    <h1>DUCKY TYPING</h1>
+                    <h1>DUCKY TYPE</h1>
                 </div>
             </Link>
             <div className={styles.logoContainer}>

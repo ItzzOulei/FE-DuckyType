@@ -13,7 +13,7 @@ export default function Impressum() {
                 <h3 className={styles.subtitle}>Kontakt</h3>
                 <p className={styles.text}>
                     Telefon: +41 77 483 97 83<br />
-                    E-Mail: info@duckytyping.com<br />
+                    E-Mail: info@duckytype.com<br />
                 </p>
                 <p className={styles.text}>
                     Die Inhalte unserer Seiten wurden mit grösster Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.

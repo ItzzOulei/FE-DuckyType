@@ -10,8 +10,8 @@ function AGB() {
                     <h2 className={styles.subtitle}>1. Geltungsbereich</h2>
                     <p className={styles.text}>
                         Die nachfolgenden Allgemeinen Geschäftsbedingungen gelten für
-                        sämtliche Verträge, die zwischen duckytyping GMBH, nachfolgend „Anbieter“ genannt, und
-                        einem Kunden über die Webseite duckytyping.com oder
+                        sämtliche Verträge, die zwischen duckytype GMBH, nachfolgend „Anbieter“ genannt, und
+                        einem Kunden über die Webseite duckytype.com oder
                         andere Vertriebskanäle abgeschlossen werden.
                     </p>
                     <p className={styles.text}>
@@ -98,7 +98,7 @@ function AGB() {
                         des Vertrags. Zur Wahrung der Frist genügt die rechtzeitige Absendung des Widerrufs.
                     </p>
                     <p className={styles.text}>
-                        Der Widerruf ist schriftlich (z. B. per Brief, E-Mail) an info@duckytyping.com zu
+                        Der Widerruf ist schriftlich (z. B. per Brief, E-Mail) an info@duckytype.com zu
                         richten. Ein Muster-Widerrufsformular steht auf der Webseite zur Verfügung.
                     </p>
                     <p className={styles.text}>
@@ -175,7 +175,7 @@ function AGB() {
                         einer Verbraucherschlichtungsstelle teilzunehmen.
                     </p>
                     <p className={styles.text}>
-                        Für Beschwerden steht dem Kunden der Kundenservice unter info@duckytyping.com zur
+                        Für Beschwerden steht dem Kunden der Kundenservice unter info@duckytype.com zur
                         Verfügung.
                     </p>
                 </section>
