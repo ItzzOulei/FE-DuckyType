@@ -114,7 +114,14 @@ export default function ProfilePage() {
                         <div className={styles.profileContainer}>
                     <img src="https://placehold.co/200x200?text=Campus+Type" alt="Campus Type" />
                     <div className={styles.profileStats}>
-                        <h2>{user.username}</h2>
+                        <div className={styles.usernameEdit}>
+                            <h2>{user.username}</h2>
+                            {ownProfile === true && (
+                                <Link href={`/profile/edit/${user.id}`}>
+                                    <i className="large material-icons">mode_edit</i>
+                                </Link>
+                            )}
+                        </div>
                         <h4>tests completed</h4>
                         <h3>{results.length}</h3>
                         <h4>time typing</h4>

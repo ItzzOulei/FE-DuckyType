@@ -13,6 +13,7 @@ const TypingTest = () => {
     const [testToken, setTestToken] = useState(null);
     const [startTime, setStartTime] = useState(null);
     const [nextSentence, setNextSentence] = useState("");
+    const [lastTypedPositions, setLastTypedPositions] = useState([]); // Neuer Zustand für Rückkehrpositionen
     const [results, setResults] = useState({
         accuracy: "",
         raw: "",
@@ -110,6 +111,8 @@ const TypingTest = () => {
             userInput: ""
         });
         setUserLetters("");
+        setWrongChars([]);
+        setLastTypedPositions([]); // Reset Rückkehrpositionen
         setTestToken(null);
         setStartTime(null);
         startTest(wordCount);
@@ -147,6 +150,62 @@ const TypingTest = () => {
         setUserLetters(updated);
     };
 
+    //Contributed by lo-steiner
+    const skipToNextWord = () => {
+        const words = displayLetters.split(" ");
+        let currentPos = userLetters.length;
+        let currentWordStart = 0;
+        let currentWordIndex = 0;
+
+        // Finde das aktuelle Wort
+        for (let i = 0; i < words.length; i++) {
+            const wordLength = words[i].length;
+            if (currentPos >= currentWordStart && currentPos <= currentWordStart + wordLength) {
+                currentWordIndex = i;
+                break;
+            }
+            currentWordStart += wordLength + 1; // +1 für das Leerzeichen
+        }
+
+        const currentWord = words[currentWordIndex];
+        const wordEndPos = currentWordStart + currentWord.length;
+        const hasStartedWord = currentPos > currentWordStart;
+        const isWordComplete = currentPos === wordEndPos;
+
+        // Prüfe, ob das Wort vollständig ist oder mindestens ein Buchstabe eingegeben wurde
+        if (!hasStartedWord && !isWordComplete) {
+            return; // Verhindert Leertasten-Spamming
+        }
+
+        let updatedUserLetters = userLetters;
+        let updatedLastTypedPositions = [...lastTypedPositions];
+
+        // Speichere die Position des letzten eingegebenen Buchstabens
+        updatedLastTypedPositions.push(currentPos);
+        setLastTypedPositions(updatedLastTypedPositions);
+
+        // Wenn das Wort nicht vollständig ist, fülle mit Platzhaltern auf
+        if (!isWordComplete) {
+            const remainingLetters = currentWord.slice(currentPos - currentWordStart);
+            for (let i = 0; i < remainingLetters.length; i++) {
+                updatedUserLetters += "_"; // Platzhalter für übersprungene Buchstaben
+            }
+        }
+
+        // Prüfe, ob dies das letzte Wort ist und der Test abgeschlossen werden soll
+        if (currentWordIndex === words.length - 1 && isWordComplete) {
+            // Fülle den restlichen Text mit Platzhaltern auf, um den Test abzuschließen
+            while (updatedUserLetters.length < displayLetters.length) {
+                updatedUserLetters += "_";
+            }
+        } else {
+            // Füge ein Leerzeichen hinzu, um zum nächsten Wort zu springen
+            updatedUserLetters += " ";
+        }
+
+        setUserLetters(updatedUserLetters);
+    };
+
     const handleFinish = async () => {
         if (!startTime) {
             console.log("No start time, cannot finish test");
@@ -157,15 +216,23 @@ const TypingTest = () => {
         let incorrect = 0;
         const wrongPositions = [];
 
-        displayLetters.split("").map((char, i) => {
-            if (userLetters[i] === char) {
+        displayLetters.split("").forEach((char, i) => {
+            const userChar = userLetters[i] || "";
+            if (userChar === "_") {
+                incorrect += 1;
+                wrongPositions.push({
+                    position: i,
+                    expected: char,
+                    typed: null
+                });
+            } else if (userChar === char) {
                 correct += 1;
             } else {
                 incorrect += 1;
                 wrongPositions.push({
                     position: i,
                     expected: char,
-                    typed: userLetters[i] || null
+                    typed: userChar || null
                 });
             }
         });
@@ -176,8 +243,6 @@ const TypingTest = () => {
         const accInDec = correct / (incorrect + correct);
         const acc = Math.round(accInDec * 100);
         const wpm = Math.round((wordCount / timeInMinutes) * accInDec);
-
-        console.log("Calculated accuracy:", acc, "Correct:", correct, "Incorrect:", incorrect);
 
         const newResults = {
             accuracy: acc,
@@ -224,13 +289,29 @@ const TypingTest = () => {
         }
 
         if (!showResults) {
-            if ((e.key.length === 1 && /^[a-zA-Z]$/.test(e.key)) || e.key === " ") {
+            if (e.key === " ") {
+                e.preventDefault();
+                skipToNextWord();
+            } else if (e.key.length === 1 && /^[a-zA-Z]$/.test(e.key)) {
                 addLetter(e.key);
                 e.preventDefault();
-            }
-            if (e.key === "Backspace") {
-                setUserLetters(userLetters.slice(0, -1));
+            } else if (e.key === "Backspace") {
                 e.preventDefault();
+                let updatedUserLetters = userLetters;
+                let updatedLastTypedPositions = [...lastTypedPositions];
+
+                if (updatedUserLetters.length > 0) {
+                    if (updatedLastTypedPositions.length > 0 && updatedUserLetters.endsWith(" ")) {
+                        // Kehre zur letzten eingegebenen Position zurück
+                        const lastPos = updatedLastTypedPositions.pop();
+                        updatedUserLetters = updatedUserLetters.slice(0, lastPos);
+                        setLastTypedPositions(updatedLastTypedPositions);
+                    } else {
+                        // Normales Löschen des letzten Buchstabens
+                        updatedUserLetters = updatedUserLetters.slice(0, -1);
+                    }
+                    setUserLetters(updatedUserLetters);
+                }
             }
         }
     };
@@ -274,7 +355,7 @@ const TypingTest = () => {
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [userLetters, displayLetters, showResults, results]);
+    }, [userLetters, displayLetters, showResults, results, lastTypedPositions]);
 
     return (
         <div className={styles.container}>
@@ -294,7 +375,11 @@ const TypingTest = () => {
                         {displayLetters.split("").map((char, i) => {
                             let className = styles.default;
                             if (userLetters[i]) {
-                                className = userLetters[i] === char ? styles.correct : styles.wrong;
+                                if (userLetters[i] === "_") {
+                                    className = styles.wrong; // Übersprungene Buchstaben rot markieren
+                                } else {
+                                    className = userLetters[i] === char ? styles.correct : styles.wrong;
+                                }
                             }
                             return (
                                 <span key={i} className={className}>

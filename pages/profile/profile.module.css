@@ -130,6 +130,16 @@
     margin: 10px;
 }
 
+.usernameEdit {
+    display: flex;
+    align-items: center;
+}
+
+.usernameEdit i{
+    padding-left: 10px;
+    padding-top: 30px;
+}
+
 @media (prefers-color-scheme: light) {
     .topContainer {
         background-color: #ffffff;

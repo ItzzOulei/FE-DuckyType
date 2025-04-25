@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
         <>
             <Head>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <title>CampusType</title>
+                <title>DuckyType</title>
                 <link rel="icon" href="/CampusType.jpg" />
             </Head>
             <div className={styles.pageContainer}> {/* New wrapper */}
@@ -31,7 +31,7 @@ const Layout = ({ children }) => {
                     <main className={styles.content}>
                         {children}
                         <ToastContainer
-                position="top-left"
+                position="bottom-left"
                 autoClose={3000}
                 hideProgressBar={false}
                 newestOnTop
