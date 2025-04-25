@@ -13,7 +13,7 @@ const TypingTest = () => {
     const [testToken, setTestToken] = useState(null);
     const [startTime, setStartTime] = useState(null);
     const [nextSentence, setNextSentence] = useState("");
-    const [lastTypedPositions, setLastTypedPositions] = useState([]); // Neuer Zustand für Rückkehrpositionen
+    const [lastTypedPositions, setLastTypedPositions] = useState([]);
     const [results, setResults] = useState({
         accuracy: "",
         raw: "",
@@ -112,7 +112,7 @@ const TypingTest = () => {
         });
         setUserLetters("");
         setWrongChars([]);
-        setLastTypedPositions([]); // Reset Rückkehrpositionen
+        setLastTypedPositions([]);
         setTestToken(null);
         setStartTime(null);
         startTest(wordCount);
@@ -150,7 +150,7 @@ const TypingTest = () => {
         setUserLetters(updated);
     };
 
-    //Contributed by lo-steiner
+    //Contributed by loic steiner
     const skipToNextWord = () => {
         const words = displayLetters.split(" ");
         let currentPos = userLetters.length;
@@ -192,8 +192,8 @@ const TypingTest = () => {
             }
         }
 
-        // Prüfe, ob dies das letzte Wort ist und der Test abgeschlossen werden soll
-        if (currentWordIndex === words.length - 1 && isWordComplete) {
+        // Prüfe, ob dies das letzte Wort ist
+        if (currentWordIndex === words.length - 1) {
             // Fülle den restlichen Text mit Platzhaltern auf, um den Test abzuschließen
             while (updatedUserLetters.length < displayLetters.length) {
                 updatedUserLetters += "_";
