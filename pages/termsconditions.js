@@ -27,13 +27,13 @@ export default function TermsOfUse() {
                     <p className={styles.text}>
                         Die folgenden Verhaltensweisen sind auf oulei.ch untersagt:
                     </p>
-                    <ul className={styles.text}>
-                        <li>Unbefugtes Eindringen in Systeme (Hacking),</li>
-                        <li>Versuche, Sicherheitsfunktionen zu umgehen,</li>
-                        <li>Nutzung von automatisierten Skripten, Bots oder Scraper-Software,</li>
-                        <li>Verbreitung von Viren oder schädlichem Code,</li>
-                        <li>Veröffentlichung oder Verlinkung von rechtswidrigen Inhalten.</li>
-                    </ul>
+                    <p className={styles.text}>
+                        - Unbefugtes Eindringen in Systeme (Hacking), <br/>
+                        - Versuche, Sicherheitsfunktionen zu umgehen,<br/>
+                        - Nutzung von automatisierten Skripten, Bots oder Scraper-Software,<br/>
+                        - Verbreitung von Viren oder schädlichem Code,<br/>
+                        - Veröffentlichung oder Verlinkung von rechtswidrigen Inhalten.<br/>
+                    </p>
                     <p className={styles.text}>
                         Zuwiderhandlungen können zur Sperrung des Zugangs führen und rechtliche Schritte nach sich ziehen.
                     </p>
