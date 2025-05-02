@@ -17,8 +17,8 @@ const Footer = () => {
                 <Link href="/impressum">
                     <p>Impressum</p>
                 </Link>
-                <Link href="/aboutus">
-                    <p>About Us</p>
+                <Link href="/termsconditions">
+                    <p>Terms & Conditions</p>
                 </Link>
             </div>
         </footer>
