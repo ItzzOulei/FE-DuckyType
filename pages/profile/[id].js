@@ -112,7 +112,7 @@ export default function ProfilePage() {
                 <div className={styles.mobileContainer}>
                     {width > 980 ? (
                         <div className={styles.profileContainer}>
-                    <img src="https://placehold.co/200x200?text=Campus+Type" alt="Campus Type" />
+                    <img src="https://placehold.co/200x200?text=Ducky+Type" alt="Campus Type" />
                     <div className={styles.profileStats}>
                         <div className={styles.usernameEdit}>
                             <h2>{user.username}</h2>

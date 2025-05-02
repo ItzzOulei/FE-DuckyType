@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Footer.module.css';
 import Image from 'next/image';
 import Link from "next/link";
+import Privacypolicy from "../../pages/privacypolicy.js";
 
 const Footer = () => {
     return (
@@ -10,8 +11,8 @@ const Footer = () => {
                 <Link href="/contactus">
                     <p>Contact Us</p>
                 </Link>
-                <Link href="/agb">
-                    <p>AGBs</p>
+                <Link href="/privacypolicy">
+                    <p>Privacy Policy</p>
                 </Link>
                 <Link href="/impressum">
                     <p>Impressum</p>
