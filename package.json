@@ -3,24 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "homepage": "https://itzzoulei.github.io/FE_Campustype",
+  "engines": {
+    "node": "22.15.0"
+  },
   "scripts": {
     "dev": "concurrently --kill-others \"npm run lint-watch\" \"next dev\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "lint-watch": "nodemon --watch . --exec next lint",
-    "cypress:open": "cypress:open",
-    "predeploy": "npm run build",
-    "deploy": "echo 'Deploy to Azure Web App is handled by GitHub Actions'"
+    "cypress:open": "cypress:open"
   },
   "dependencies": {
     "jwt-decode": "^4.0.0",
     "materialize-css": "^1.0.0-rc.2",
     "next": "15.2.4",
-    "nodemon": "^3.1.9",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-toastify": "^11.0.5",
     "theaterjs": "^3.2.0"
   },
@@ -28,6 +27,7 @@
     "concurrently": "^9.1.2",
     "cypress": "^14.2.1",
     "eslint": "^9.23.0",
-    "eslint-config-next": "15.2.4"
+    "eslint-config-next": "15.2.4",
+    "nodemon": "^3.1.9"
   }
 }
