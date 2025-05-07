@@ -11,7 +11,10 @@
 }
 
 .settingsContainer {
+    position: relative;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     margin-bottom: 30px;
 }
@@ -26,7 +29,7 @@
     border-radius: 20px;
 }
 
-.settingsClickable:hover{
+.settingsClickable:hover {
     cursor: pointer;
     color: #85B8FF;
 }
@@ -98,6 +101,16 @@
     100% { opacity: 1; }
 }
 
+@keyframes slideIn {
+    0% { transform: translateX(-100%);}
+    100% { transform: translateX(0);}
+}
+
+@keyframes slideOut {
+    0% { transform: translateX(0);}
+    100% { transform: translateX(-100%);}
+}
+
 .wrong {
     color: #d33300;
 }
@@ -128,6 +141,30 @@
     width: 2px;
     background-color: #85B8FF;
     transition: left 0.1s ease-out;
+}
+
+.caps {
+    z-index: -10;
+    position: absolute;
+    left: 60%;
+    background-color: #d33300;
+    padding: 2px 15px;
+    border-radius: 20px;
+    width: fit-content;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-100%);
+}
+
+.capsActive {
+    animation: slideIn 0.5s ease-out forwards;
+}
+
+.capsInactive {
+    animation: slideOut 0.5s ease-out forwards;
+    pointer-events: none;
 }
 
 .displayResult {
@@ -230,11 +267,11 @@
         color: #85B8FF;
     }
 
-    .settingsClickable{
+    .settingsClickable {
         transition: 0.5s ease-out;
     }
 
-    .settingsClickable:hover{
+    .settingsClickable:hover {
         cursor: pointer;
         color: #000000;
         transition: 0.5s ease-out;

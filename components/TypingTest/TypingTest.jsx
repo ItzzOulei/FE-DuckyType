@@ -26,6 +26,7 @@ const TypingTest = () => {
         userInput: "",
         timestamp: ""
     });
+    const [capsLockOn, setCapsLockOn] = useState(false);
     const [showResults, setShowResults] = useState(false);
     const textRef = useRef(null);
     const cursorRef = useRef(null);
@@ -206,6 +207,14 @@ const TypingTest = () => {
         setUserLetters(updatedUserLetters);
     };
 
+    const checkCapsLock = (event) => {
+        if (event.getModifierState('CapsLock')) {
+            setCapsLockOn(true);
+        } else {
+            setCapsLockOn(false);
+        }
+    };
+
     const handleFinish = async () => {
         if (!startTime) {
             console.log("No start time, cannot finish test");
@@ -277,6 +286,7 @@ const TypingTest = () => {
     };
 
     const handleKeyDown = (e) => {
+        setCapsLockOn(e.getModifierState("CapsLock"))
         if (e.key === "Tab") {
             e.preventDefault();
             resetTest();
@@ -368,6 +378,10 @@ const TypingTest = () => {
                     <p>|</p>
                     <p className={styles.settingsClickable} onClick={handleReturn}>Clear</p>
                 </div>
+                <div className={`${styles.caps} ${capsLockOn ? styles.capsActive : styles.capsInactive}`}>
+                    <span className="material-icons">priority_high</span>
+                    <p>Caps Lock</p>
+                </div>
             </div>
             <div className={`${styles.viewContainer} ${showResults ? styles.showResults : styles.showTyping}`}>
                 <div className={styles.typingView} onClick={handleTap}>
@@ -376,7 +390,7 @@ const TypingTest = () => {
                             let className = styles.default;
                             if (userLetters[i]) {
                                 if (userLetters[i] === "_") {
-                                    className = styles.wrong; // Übersprungene Buchstaben rot markieren
+                                    className = styles.wrong;
                                 } else {
                                     className = userLetters[i] === char ? styles.correct : styles.wrong;
                                 }
@@ -390,6 +404,8 @@ const TypingTest = () => {
                         {!showResults && <div ref={cursorRef} className={styles.cursor}></div>}
                     </div>
                     <input
+                        onKeyUp={checkCapsLock}
+                        onKeyDown={checkCapsLock}
                         ref={inputRef}
                         type="text"
                         style={{ opacity: 0, position: "absolute", width: 0, height: 0 }}
