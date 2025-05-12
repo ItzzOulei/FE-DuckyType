@@ -370,7 +370,7 @@ const TypingTest = () => {
     return (
         <div className={styles.container}>
             <div className={styles.birthday}>
-                <p>Happy Birthday Loic</p>
+                <p></p>
             </div>
             <div className={`${showResults ? styles.showResults : styles.showTyping} ${styles.settingsContainer}`}>
                 <div className={styles.settingsIcons}>
