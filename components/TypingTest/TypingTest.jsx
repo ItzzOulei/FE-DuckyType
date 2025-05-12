@@ -407,10 +407,14 @@ const TypingTest = () => {
                         className={styles.usernameInput}
                         disabled={startTime !== null || userLetters.length > 0}
                     />
+                    <div className={styles.deleteUsernameContainer}
+                    onClick={() => {setUsername("")}}>
+                        <i className="material-icons">delete</i>
+                    </div>
                 </div>
             )}
             <div className={styles.birthday}>
-                <p>Happy Birthday Loic</p>
+                <p></p>
             </div>
             <div className={`${showResults ? styles.showResults : styles.showTyping} ${styles.settingsContainer}`}>
                 <div className={styles.settingsIcons}>

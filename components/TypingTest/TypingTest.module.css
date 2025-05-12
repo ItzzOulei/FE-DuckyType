@@ -234,6 +234,40 @@
     flex-wrap: wrap;
 }
 
+.usernameContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.usernameInput {
+    all: unset;
+    font-size: 0.9rem;
+    border-radius: 20px;
+    text-align: center;
+    background-color: #383838;
+    padding: 7px;
+    max-width: 300px;
+    width: 100%;
+}
+
+.deleteUsernameContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    transition: ease-in 0.2s;
+    padding: 3px;
+    background-color: #383838;
+    border-radius: 15px;
+}
+
+.deleteUsernameContainer:hover {
+    cursor: pointer;
+    color: #85B8FF;
+    transition: ease-in 0.2s;
+}
+
 @media (prefers-color-scheme: light) {
     .cursor {
         background-color: #85B8FF;
@@ -243,6 +277,29 @@
         color: white;
         background-color: #85B8FF;
     }
+
+    .usernameInput::placeholder {
+        color: rgba(255, 255, 255, 0.56);
+    }
+
+    .usernameInput {
+        color: white;
+        background-color: #85B8FF;
+    }
+
+    .deleteUsernameContainer {
+        color: white;
+        background-color: #85B8FF;
+        padding: 3px;
+        border-radius: 15px;
+    }
+
+    .deleteUsernameContainer:hover {
+        cursor: pointer;
+        color: #d3e7ff;
+        transition: ease-in 0.2s;
+    }
+
     .infoContainer {
         color: #85B8FF;
     }
