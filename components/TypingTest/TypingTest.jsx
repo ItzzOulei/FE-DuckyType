@@ -393,22 +393,6 @@ const TypingTest = () => {
 
     return (
         <div className={styles.container}>
-            {!session?.accessToken && (
-                <div className={styles.usernameContainer}>
-                    <input
-                        ref={usernameInputRef}
-                        type="text"
-                        placeholder="Enter username to save results"
-                        value={username}
-                        onChange={(e) => {
-                            setUsername(e.target.value);
-                            resetInactivityTimer();
-                        }}
-                        className={styles.usernameInput}
-                        disabled={startTime !== null || userLetters.length > 0}
-                    />
-                </div>
-            )}
             <div className={styles.birthday}>
                 <p></p>
             </div>

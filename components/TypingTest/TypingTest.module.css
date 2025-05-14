@@ -1,5 +1,5 @@
 .container {
-    margin-top: 30%;
+    margin-top: 30vh;
     position: relative;
     width: 100%;
     min-height: 200px;
@@ -237,6 +237,10 @@
 @media (prefers-color-scheme: light) {
     .cursor {
         background-color: #85B8FF;
+    }
+
+    .caps {
+        color: white;
     }
 
     .settingsIcons {

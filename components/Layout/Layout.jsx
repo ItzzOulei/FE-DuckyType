@@ -23,9 +23,9 @@ const Layout = ({ children }) => {
             <Head>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <title>DuckyType</title>
-                <link rel="icon" href="/CampusType.jpg" />
+                <link rel="icon" href="/DuckyType.jpg" />
             </Head>
-            <div className={styles.pageContainer}> {/* New wrapper */}
+            <div className={styles.pageContainer}>
                 <div className={styles.contentWrapper}>
                     <Header />
                     <main className={styles.content}>
