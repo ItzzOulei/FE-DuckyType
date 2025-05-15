@@ -64,7 +64,7 @@ export default function ProfilePage() {
             <div className={styles.body}>
                 <div className={styles.topContainer}>
                     <div className={styles.profileContainer}>
-                        <Image src="https://placehold.co/200x200?text=Campus+Type" alt="Campus Type" />
+                        <img src="https://placehold.co/200x200?text=Campus+Type" alt="Campus Type" />
                         <div className={styles.profileStats}>
                             <span className={styles.loadingPlaceholderText}></span>
                             <h4>tests completed</h4>
@@ -113,7 +113,7 @@ export default function ProfilePage() {
                 <div className={styles.mobileContainer}>
                     {width > 980 ? (
                         <div className={styles.profileContainer}>
-                    <Image src="https://placehold.co/200x200?text=Ducky+Type" alt="Ducky Type" />
+                    <img src="https://placehold.co/200x200?text=Ducky+Type" alt="Ducky Type" />
                     <div className={styles.profileStats}>
                         <div className={styles.usernameEdit}>
                             <h2>{user.username}</h2>
@@ -131,7 +131,7 @@ export default function ProfilePage() {
                 </div>
                     ) : (
                         <div className={styles.profileContainer}>
-                            <Image src="https://placehold.co/200x200?text=Campus+Type" alt="Campus Type" />
+                            <img src="https://placehold.co/200x200?text=Campus+Type" alt="Campus Type" />
                             <div className={styles.editProfile}>
                                 <h2>{user.username}</h2>
                                 {ownProfile === true && (
