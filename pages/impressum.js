@@ -13,7 +13,7 @@ export default function Impressum() {
                 <h3 className={styles.subtitle}>Kontakt</h3>
                 <p className={styles.text}>
                     Telefon: +41 76 386 99 44<br />
-                    E-Mail: olivier@deszynski.com<br />
+                    E-Mail: info@oulei.ch<br />
                 </p>
                 <p className={styles.text}>
                     Die Inhalte unserer Seiten wurden mit grösster Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.

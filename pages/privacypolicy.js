@@ -77,9 +77,9 @@ export default function Privacypolicy() {
                     </p>
                     <p className={styles.text}>
                         DuckyType<br />
-                        Engehaldenstrasse 26<br />
-                        3000 Bern, Schweiz<br />
-                        E-Mail: olivier@deszynskicom
+                        Sunnedörflistrasse 42<br />
+                        3512 Bern, Schweiz<br />
+                        E-Mail: info@oulei.ch
                     </p>
                 </section>
             </div>

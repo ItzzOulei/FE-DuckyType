@@ -69,14 +69,15 @@ const RegisterForm = ({ post }) => {
         setIsLoading(true);
 
         try {
-            const registerResponse = await UsersAPI.register({
+            await UsersAPI.register({
                 username: user.username,
                 email: user.email,
                 password: user.password,
             });
 
             toast.success("Registration successful! Please check your email to verify your account.", { transition: Bounce });
-            router.push(`/auth-waiting?email=${encodeURIComponent(user.email)}`);
+            // Pass both email and password for auto-login after verification
+            router.push(`/auth-waiting?email=${encodeURIComponent(user.email)}&password=${encodeURIComponent(user.password)}`);
         } catch (err) {
             let errorMessage = "An error occurred";
             if (err.response) {

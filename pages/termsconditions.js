@@ -73,7 +73,7 @@ export default function TermsOfUse() {
                     <h2 className={styles.subtitle}>7. Kontakt</h2>
                     <p className={styles.text}>
                         Bei Fragen oder Meldungen zu Verstössen gegen diese Nutzungsbedingungen:
-                        <a href="mailto:olivier@deszynski.com"> olivier@deszynski.com</a>
+                        <a href="mailto:info@oulei.ch"> info@oulei.ch</a>
                     </p>
                 </section>
             </div>

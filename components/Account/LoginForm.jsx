@@ -1,17 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Bounce, toast } from "react-toastify";
 import UsersAPI from "../../lib/api/Users.js";
 import { useGlobalContext } from "../../store/index.js";
 import { router } from "next/client.js";
+import { useRouter as useNextRouter } from "next/router";
 import styles from "./LoginForm.module.css";
 import Link from "next/link";
 
 const LoginForm = ({ post }) => {
     const { session, login, logout } = useGlobalContext();
+    const nextRouter = useNextRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({ email: "", password: "" });
     const [user, setUser] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false);
+
+    useEffect(() => {
+        // Handle verification success redirect
+        const { verified, email, error } = nextRouter.query;
+
+        if (verified === 'true' && email) {
+            toast.success("Account verified successfully! You can now log in.", { transition: Bounce });
+            setUser(prev => ({ ...prev, email: decodeURIComponent(email) }));
+        } else if (verified === 'false') {
+            if (error === 'invalid') {
+                toast.error("Invalid verification link.", { transition: Bounce });
+            } else if (error === 'expired') {
+                toast.error("Verification link has expired.", { transition: Bounce });
+            }
+        }
+    }, [nextRouter.query]);
 
     const validateUser = (user) => {
         let isValid = true;
@@ -60,8 +78,28 @@ const LoginForm = ({ post }) => {
             toast.success("Login successfull!", { transition: Bounce });
             router.push("/");
         } catch (err) {
-            setErrors({ email: "Invalid Credentials", password: "Invalid Credentials" });
-            toast.error("Invalid Credentials", { transition: Bounce });
+            let errorMessage = "Invalid Credentials";
+
+            // Check if it's a 401 error and get the error message from backend
+            if (err.response && err.response.status === 401) {
+                try {
+                    const errorData = await err.response.json();
+                    if (errorData.error && errorData.error.includes("not verified")) {
+                        // Account exists but not verified - redirect to auth-waiting page with auto-login
+                        toast.warning("Verification email sent! Check your inbox.", { transition: Bounce });
+                        router.push(`/auth-waiting?email=${encodeURIComponent(user.email)}&password=${encodeURIComponent(user.password)}`);
+                        setIsLoading(false);
+                        return;
+                    }
+                    errorMessage = errorData.error || "Invalid Credentials";
+                } catch (jsonError) {
+                    // If response is not JSON, use default message
+                    errorMessage = "Invalid Credentials";
+                }
+            }
+
+            setErrors({ email: errorMessage, password: errorMessage });
+            toast.error(errorMessage, { transition: Bounce });
         }
         setIsLoading(false);
     };
