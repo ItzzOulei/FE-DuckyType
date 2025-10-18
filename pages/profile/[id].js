@@ -4,6 +4,7 @@ import TypingResultAPI from '../../lib/api/TypingResult';
 import UsersAPI from '../../lib/api/Users';
 import styles from './profile.module.css';
 import Link from 'next/link';
+import Image from 'next/image';
 
 function calculateAverage(array, field) {
     if (!array || array.length === 0) return 0;
@@ -112,7 +113,7 @@ export default function ProfilePage() {
                 <div className={styles.mobileContainer}>
                     {width > 980 ? (
                         <div className={styles.profileContainer}>
-                    <img src="https://placehold.co/200x200?text=Ducky+Type" alt="Campus Type" />
+                    <img src="https://placehold.co/200x200?text=Ducky+Type" alt="Ducky Type" />
                     <div className={styles.profileStats}>
                         <div className={styles.usernameEdit}>
                             <h2>{user.username}</h2>

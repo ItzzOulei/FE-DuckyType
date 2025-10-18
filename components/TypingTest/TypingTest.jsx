@@ -10,10 +10,11 @@ const TypingTest = () => {
     const [wrongChars, setWrongChars] = useState([]);
     const [displayLetters, setDisplayLetters] = useState("");
     const [userLetters, setUserLetters] = useState("");
-    const [testToken, setTestToken] = useState(null);
     const [startTime, setStartTime] = useState(null);
     const [nextSentence, setNextSentence] = useState("");
     const [lastTypedPositions, setLastTypedPositions] = useState([]);
+    const [username, setUsername] = useState("");
+    const [testToken, setTestToken] = useState(null);
     const [results, setResults] = useState({
         accuracy: "",
         raw: "",
@@ -24,13 +25,16 @@ const TypingTest = () => {
         characters: "",
         sentence: "",
         userInput: "",
-        timestamp: ""
+        timestamp: "",
+        username: ""
     });
     const [capsLockOn, setCapsLockOn] = useState(false);
     const [showResults, setShowResults] = useState(false);
     const textRef = useRef(null);
     const cursorRef = useRef(null);
     const inputRef = useRef(null);
+    const usernameInputRef = useRef(null);
+    const inactivityTimerRef = useRef(null);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -109,24 +113,36 @@ const TypingTest = () => {
             words: "",
             characters: "",
             sentence: "",
-            userInput: ""
+            userInput: "",
+            username: ""
         });
         setUserLetters("");
         setWrongChars([]);
         setLastTypedPositions([]);
-        setTestToken(null);
         setStartTime(null);
+        setTestToken(null);
         startTest(wordCount);
         if (inputRef.current) {
             inputRef.current.focus();
         }
     };
 
-    const generateTestTokenAsync = async () => {
-        const localStartTime = Date.now();
-        setStartTime(localStartTime);
+    const resetInactivityTimer = () => {
+        if (inactivityTimerRef.current) {
+            clearTimeout(inactivityTimerRef.current);
+        }
         if (!session?.accessToken) {
-            console.log("No access token, skipping token generation");
+            inactivityTimerRef.current = setTimeout(() => {
+                setUsername("");
+                if (usernameInputRef.current) {
+                    usernameInputRef.current.value = "";
+                }
+            }, 30000);
+        }
+    };
+
+    const generateTestTokenAsync = async () => {
+        if (!session?.accessToken) {
             return;
         }
         try {
@@ -136,36 +152,36 @@ const TypingTest = () => {
             );
             setTestToken(response.token);
             console.log("Test token set:", response.token);
-            return response.token;
         } catch (error) {
             console.error("Error generating test token:", error);
-            return null;
         }
     };
 
     const addLetter = (letter) => {
         if (userLetters.length === 0 && !startTime) {
-            generateTestTokenAsync();
+            setStartTime(Date.now());
+            if (session?.accessToken) {
+                generateTestTokenAsync();
+            }
         }
         const updated = userLetters + letter;
         setUserLetters(updated);
+        resetInactivityTimer();
     };
 
-    //Contributed by loic steiner
     const skipToNextWord = () => {
         const words = displayLetters.split(" ");
         let currentPos = userLetters.length;
         let currentWordStart = 0;
         let currentWordIndex = 0;
 
-        // Finde das aktuelle Wort
         for (let i = 0; i < words.length; i++) {
             const wordLength = words[i].length;
             if (currentPos >= currentWordStart && currentPos <= currentWordStart + wordLength) {
                 currentWordIndex = i;
                 break;
             }
-            currentWordStart += wordLength + 1; // +1 für das Leerzeichen
+            currentWordStart += wordLength + 1;
         }
 
         const currentWord = words[currentWordIndex];
@@ -173,38 +189,33 @@ const TypingTest = () => {
         const hasStartedWord = currentPos > currentWordStart;
         const isWordComplete = currentPos === wordEndPos;
 
-        // Prüfe, ob das Wort vollständig ist oder mindestens ein Buchstabe eingegeben wurde
         if (!hasStartedWord && !isWordComplete) {
-            return; // Verhindert Leertasten-Spamming
+            return;
         }
 
         let updatedUserLetters = userLetters;
         let updatedLastTypedPositions = [...lastTypedPositions];
 
-        // Speichere die Position des letzten eingegebenen Buchstabens
         updatedLastTypedPositions.push(currentPos);
         setLastTypedPositions(updatedLastTypedPositions);
 
-        // Wenn das Wort nicht vollständig ist, fülle mit Platzhaltern auf
         if (!isWordComplete) {
             const remainingLetters = currentWord.slice(currentPos - currentWordStart);
             for (let i = 0; i < remainingLetters.length; i++) {
-                updatedUserLetters += "_"; // Platzhalter für übersprungene Buchstaben
+                updatedUserLetters += "_";
             }
         }
 
-        // Prüfe, ob dies das letzte Wort ist
         if (currentWordIndex === words.length - 1) {
-            // Fülle den restlichen Text mit Platzhaltern auf, um den Test abzuschließen
             while (updatedUserLetters.length < displayLetters.length) {
                 updatedUserLetters += "_";
             }
         } else {
-            // Füge ein Leerzeichen hinzu, um zum nächsten Wort zu springen
             updatedUserLetters += " ";
         }
 
         setUserLetters(updatedUserLetters);
+        resetInactivityTimer();
     };
 
     const checkCapsLock = (event) => {
@@ -263,7 +274,9 @@ const TypingTest = () => {
             characters: (incorrect + correct),
             sentence: displayLetters,
             userInput: userLetters,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            username: session?.accessToken ? "" : username,
+            testToken: testToken
         };
 
         setWrongChars(wrongPositions);
@@ -272,21 +285,25 @@ const TypingTest = () => {
 
         prefetchSentence(wordCount);
 
-        if (session?.accessToken && acc >= 70 && testToken) {
-            console.log("Saving result:", newResults, "Token:", testToken);
+        if ((session?.accessToken || username) && acc >= 70) {
+            console.log("Saving result:", newResults);
             try {
-                await TypingResultAPI.saveResult(newResults, session.accessToken, testToken);
+                await TypingResultAPI.saveResult(newResults, session?.accessToken || null);
                 console.log("Result saved successfully");
             } catch (error) {
                 console.error("Error saving result:", error);
             }
         } else {
-            console.log("Save skipped:", { accessToken: !!session?.accessToken, acc, testToken });
+            console.log("Save skipped:", { accessToken: !!session?.accessToken, username, acc });
         }
     };
 
     const handleKeyDown = (e) => {
-        setCapsLockOn(e.getModifierState("CapsLock"))
+        if (document.activeElement === usernameInputRef.current) {
+            return;
+        }
+
+        setCapsLockOn(e.getModifierState("CapsLock"));
         if (e.key === "Tab") {
             e.preventDefault();
             resetTest();
@@ -312,18 +329,17 @@ const TypingTest = () => {
 
                 if (updatedUserLetters.length > 0) {
                     if (updatedLastTypedPositions.length > 0 && updatedUserLetters.endsWith(" ")) {
-                        // Kehre zur letzten eingegebenen Position zurück
                         const lastPos = updatedLastTypedPositions.pop();
                         updatedUserLetters = updatedUserLetters.slice(0, lastPos);
                         setLastTypedPositions(updatedLastTypedPositions);
                     } else {
-                        // Normales Löschen des letzten Buchstabens
                         updatedUserLetters = updatedUserLetters.slice(0, -1);
                     }
                     setUserLetters(updatedUserLetters);
                 }
             }
         }
+        resetInactivityTimer();
     };
 
     useEffect(() => {
@@ -366,6 +382,14 @@ const TypingTest = () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, [userLetters, displayLetters, showResults, results, lastTypedPositions]);
+
+    useEffect(() => {
+        return () => {
+            if (inactivityTimerRef.current) {
+                clearTimeout(inactivityTimerRef.current);
+            }
+        };
+    }, []);
 
     return (
         <div className={styles.container}>
@@ -416,7 +440,7 @@ const TypingTest = () => {
                     {!session?.accessToken && (
                         <div className={styles.infoContainer}>
                             <i className="material-icons">info_outline</i>
-                            <p>Log in to save your results!</p>
+                            <p>Log in or enter a username to save your results!</p>
                         </div>
                     )}
                 </div>
