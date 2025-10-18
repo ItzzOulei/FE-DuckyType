@@ -84,19 +84,19 @@ export default function Leaderboard({ loadUsers }) {
                         className={`${styles.leaderboardFilter} ${selectedFilter.type === 'words' && selectedFilter.value === 10 ? styles.activeFilter : ''}`}
                         onClick={() => handleLeaderboardChange('words', 10)}
                     >
-                        Words 10
+                        10 Words
                     </p>
                     <p
                         className={`${styles.leaderboardFilter} ${selectedFilter.type === 'words' && selectedFilter.value === 15 ? styles.activeFilter : ''}`}
                         onClick={() => handleLeaderboardChange('words', 15)}
                     >
-                        Words 15
+                        15 Words
                     </p>
                     <p
                         className={`${styles.leaderboardFilter} ${selectedFilter.type === 'words' && selectedFilter.value === 20 ? styles.activeFilter : ''}`}
                         onClick={() => handleLeaderboardChange('words', 20)}
                     >
-                        Words 20
+                        20 Words
                     </p>
                 </div>
             </div>

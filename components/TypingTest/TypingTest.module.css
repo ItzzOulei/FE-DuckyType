@@ -234,6 +234,12 @@
     flex-wrap: wrap;
 }
 
+@media only screen and (max-width: 430px) {
+    .caps {
+        display: none;
+    }
+}
+
 @media (prefers-color-scheme: light) {
     .cursor {
         background-color: #85B8FF;

@@ -130,7 +130,7 @@ export default function ProfilePage() {
                 </div>
                     ) : (
                         <div className={styles.profileContainer}>
-                            <img src="https://placehold.co/200x200?text=Campus+Type" alt="Campus Type" />
+                            <img src="https://placehold.co/200x200?text=Ducky+Type" alt="Campus Type" />
                             <div className={styles.editProfile}>
                                 <h2>{user.username}</h2>
                                 {ownProfile === true && (

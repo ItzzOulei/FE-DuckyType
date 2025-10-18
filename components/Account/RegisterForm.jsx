@@ -6,7 +6,7 @@ import { router } from "next/client.js";
 import styles from "./LoginForm.module.css";
 import Link from "next/link";
 
-const LoginForm = ({ post }) => {
+const RegisterForm = ({ post }) => {
     const { session, login, logout } = useGlobalContext();
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({ username: "", email: "", password: "", passwordConfirm: "" });
@@ -75,14 +75,8 @@ const LoginForm = ({ post }) => {
                 password: user.password,
             });
 
-            const loginResponse = await UsersAPI.login({
-                email: user.email,
-                password: user.password,
-            });
-
-            login(loginResponse);
-            toast.success("Register successful!", { transition: Bounce });
-            router.push("/");
+            toast.success("Registration successful! Please check your email to verify your account.", { transition: Bounce });
+            router.push(`/auth-waiting?email=${encodeURIComponent(user.email)}`);
         } catch (err) {
             let errorMessage = "An error occurred";
             if (err.response) {
@@ -194,4 +188,4 @@ const LoginForm = ({ post }) => {
     );
 };
 
-export default LoginForm;
+export default RegisterForm;
