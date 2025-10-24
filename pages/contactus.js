@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../styles/contactus.module.css';
 import { toast, Bounce } from 'react-toastify';
+import { BASE_URL } from '../lib/api';
 
 const ContactUs = () => {
     const [formData, setFormData] = useState({
@@ -14,6 +15,8 @@ const ContactUs = () => {
         email: '',
         message: '',
     });
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -47,12 +50,32 @@ const ContactUs = () => {
         return isValid;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateForm()) {
-            console.log('Form submitted:', formData);
-            toast.success("Message sent successfully!", { transition: Bounce });
-            setFormData({ name: '', email: '', message: '' });
+            setIsSubmitting(true);
+            try {
+                const response = await fetch(`${BASE_URL}/api/contact`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText || 'Failed to send message');
+                }
+
+                toast.success("Message sent successfully!", { transition: Bounce });
+                setFormData({ name: '', email: '', message: '' });
+            } catch (error) {
+                console.error('Error sending message:', error);
+                toast.error(error.message || "Failed to send message. Please try again.", { transition: Bounce });
+            } finally {
+                setIsSubmitting(false);
+            }
         }
     };
 
@@ -98,8 +121,8 @@ const ContactUs = () => {
                         {errors.message && <div className={styles.error}>{errors.message}</div>}
 
                     <div className={styles.buttonContainer}>
-                        <button type="submit" className={styles.button}>
-                            Send Message
+                        <button type="submit" className={styles.button} disabled={isSubmitting}>
+                            {isSubmitting ? 'Sending...' : 'Send Message'}
                         </button>
                     </div>
                 </form>

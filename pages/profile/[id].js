@@ -25,6 +25,8 @@ export default function ProfilePage() {
     const [user, setUser] = useState(null);
     const [ownProfile, setOwnProfile] = useState();
     const [width, setWidth] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(20);
 
     const handleRunRoute = (resultId) => {
         router.push(`/run/${resultId}`);
@@ -107,6 +109,18 @@ export default function ProfilePage() {
     const avgAccuracy = calculateAverage(results, 'accuracy');
     const timePlayed = calculateSum(results, 'time');
 
+    // Pagination logic
+    const sortedResults = results.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    const totalPages = Math.ceil(sortedResults.length / itemsPerPage);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentResults = sortedResults.slice(indexOfFirstItem, indexOfLastItem);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <div className={styles.body}>
             <div className={styles.topContainer}>
@@ -181,9 +195,7 @@ export default function ProfilePage() {
             </div>
             <div className={styles.bottomContainer}>
                 <ul className={styles.runsContainer}>
-                    {results
-                        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-                        .map((result, i) => {
+                    {currentResults.map((result, i) => {
                         const timestamp = result.timestamp;
                         const date = new Date(timestamp);
                         const formattedDate = date.toLocaleString("en-US", {
@@ -208,6 +220,27 @@ export default function ProfilePage() {
                     })}
                 </ul>
             </div>
+            {totalPages > 1 && (
+                <div className={styles.pagination}>
+                    <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={styles.pageButton}
+                    >
+                        Previous
+                    </button>
+                    <span className={styles.pageInfo}>
+                            Page {currentPage} of {totalPages}
+                        </span>
+                    <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className={styles.pageButton}
+                    >
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
